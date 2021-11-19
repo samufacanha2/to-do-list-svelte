@@ -3,20 +3,23 @@
   import "../styles/MyList.scss";
   import Pencil from "svelte-material-icons/Pencil.svelte";
   import Delete from "svelte-material-icons/Delete.svelte";
-
+  import axios from "axios";
   import { Link } from "svelte-routing";
   export let taskList = [];
-  onMount(() => {
-    fetch("http://localhost:3330/get")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        taskList = data;
-      });
-  });
+
+  const getData = () => {
+    axios.get("http://localhost:3330/get").then((res) => {
+      console.log(res.data);
+      taskList = res.data;
+    });
+  };
+
+  onMount(() => getData());
+
   export let deleteTask = (id) => {
-    fetch(`http://localhost:3330/delete/${id}`, {
-      method: "DELETE",
+    axios.delete(`http://localhost:3330/delete/${id}`).then((res) => {
+      console.log(res.data);
+      getData();
     });
   };
 </script>
@@ -42,7 +45,6 @@
             class="delete"
             on:click={() => {
               deleteTask(task._id);
-              window.location.reload();
             }}
           >
             <Delete />

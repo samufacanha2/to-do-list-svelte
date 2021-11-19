@@ -1,5 +1,7 @@
 <script>
   import "../styles/MyForm.scss";
+  import axios from "axios";
+
   export let update = false;
   export let id = "";
   export let title = "";
@@ -9,34 +11,18 @@
     const title = form.title.value;
     const description = form.description.value;
 
-    fetch("http://localhost:3330/create", {
-      method: "POST",
-      body: JSON.stringify({ title, description }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        window.location.href = "/";
-      }
-    });
+    axios
+      .post("http://localhost:3330/create", { title, description })
+      .then(() => (window.location.href = "/"));
   };
   let updateForm = (e) => {
     const form = e.target;
     const title = form.title.value;
     const description = form.description.value;
 
-    fetch(`http://localhost:3330/update/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({ title, description }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.ok) {
-        window.location.href = "/";
-      }
-    });
+    axios
+      .put(`http://localhost:3330/update/${id}`, { title, description })
+      .then(() => (window.location.href = "/"));
   };
   export let goBack = (event) => {
     event.preventDefault();
